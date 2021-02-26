@@ -298,7 +298,6 @@ function gen_graph () {
     var todays_expenses = expenses;
     // start this years balance off as equal to last years
     for (const account in balance) {
-//      console.log(account, balance[account]);
       balance[account].push(balance[account][prev]);
     }
     if (age < ages["Early Retirement"]) {
@@ -320,7 +319,11 @@ function gen_graph () {
     } 
 
     // Growth is applied to average value during year
-    for (const account in balance) balance[account][now] += (balance[account][prev]+balance[account][now]) * (roi) / 2;
+    for (const account in balance) {
+      if(balance[account][now]>1) {
+        balance[account][now] += (balance[account][prev]+balance[account][now]) * (roi) / 2;
+      }
+    }
     // expenses and contributions grow with inflation
     expenses *= (1+inflation);
     for (const account in contributions) contributions[account] *= (1+inflation); 
@@ -333,12 +336,15 @@ function gen_graph () {
       y: balance[account],
       mode: 'lines',
       type: 'scatter',
-      name: account
+      name: account,
+      hoverinfo: "y"
     } );
   }
 
   var layout = {
-    annotations: []
+    annotations: [],
+    yaxis: {fixedrange: true, hoverformat: '.2s'},
+    xaxis : {fixedrange: true}
   };
 
   for (milestone in ages) {
@@ -364,7 +370,7 @@ function gen_graph () {
 var inputs = document.getElementsByClassName("modelInput");
 for (var i = 0; i < inputs.length; i++) inputs[i].onchange = gen_graph;
 
-
+get_config();
 gen_graph();
 
 var rangeSlider = function(){
