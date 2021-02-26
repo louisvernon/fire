@@ -1,0 +1,364 @@
+<html>
+<head>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+h2 {
+  width: 60%;
+  text-align: right;
+}
+div.input {
+  width: 60%;
+}
+
+.modelInput {
+  width: 25%;
+  text-align: center;
+}
+
+label.input {
+  display: inline-block;
+  width: 70%;
+  text-align: right;
+}
+/* Create four equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 25%;
+  padding: 4px;
+  height: 250px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive layout - makes the four columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+  }
+}
+
+
+.range-slider {
+  margin: 10px 0 0 0%;
+}
+
+.range-slider {
+  width: 100%;
+}
+
+.range-slider__range {
+  -webkit-appearance: none;
+  width: 100px;
+  height: 10px;
+  border-radius: 5px;
+  background: #d7dcdf;
+  outline: none;
+  padding: 0;
+  margin: 0;
+}
+.range-slider__range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+          appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #2c3e50;
+  cursor: pointer;
+  -webkit-transition: background 0.15s ease-in-out;
+  transition: background 0.15s ease-in-out;
+}
+.range-slider__range::-webkit-slider-thumb:hover {
+  background: #1abc9c;
+}
+.range-slider__range:active::-webkit-slider-thumb {
+  background: #1abc9c;
+}
+.range-slider__range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 0;
+  border-radius: 50%;
+  background: #2c3e50;
+  cursor: pointer;
+  -moz-transition: background 0.15s ease-in-out;
+  transition: background 0.15s ease-in-out;
+}
+.range-slider__range::-moz-range-thumb:hover {
+  background: #1abc9c;
+}
+.range-slider__range:active::-moz-range-thumb { 
+  background: #1abc9c;
+}
+.range-slider__range:focus::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px #fff, 0 0 0 6px #1abc9c;
+}
+
+.range-slider__value {
+  display: inline-block;
+  position: relative;
+  width: 60px;
+  color: #fff;
+  line-height: 20px;
+  text-align: center;
+  border-radius: 3px;
+  background: #2c3e50;
+  padding: 5px 10px;
+  margin-left: 8px;
+}
+.range-slider__value:after {
+  position: absolute;
+  top: 8px;
+  left: -7px;
+  width: 0;
+  height: 0;
+  border-top: 7px solid transparent;
+  border-right: 7px solid #2c3e50;
+  border-bottom: 7px solid transparent;
+  content: "";
+}
+
+::-moz-range-track {
+  background: #d7dcdf;
+  border: 0;
+}
+
+input::-moz-focus-inner,
+input::-moz-focus-outer {
+  border: 0;
+}
+</style>
+</head>
+
+<body>
+
+  <div class="row">
+    <div class="column" style="background-color:#aaa;">
+
+      <h2>Current Balances</h2>
+      <div class="input">          
+      <label class="input">Regular:</label> 
+      <input id="balances-regular" value="100000" class="modelInput">
+      </div>
+      <div class="input">        
+      <label class="input"> 401K:</label> 
+      <input id="balances-401k" value="100000" class="modelInput">   
+      </div>
+      <div class="input">         
+      <label class="input">  IRA:</label> 
+      <input id="balances-ira" value="30000" class="modelInput">
+      </div>
+      <div class="input">       
+      <label class="input">IRA Basis (optional):</label>
+      <input id="ira-basis" value="20000" class="modelInput">
+      </div>
+
+
+    </div>
+    <div class="column" style="background-color:#bbb;">
+
+        <h2>Annual Contributions</h2>
+        <div class="input">          
+        <label class="input">Regular:</label> 
+        <input id="contributions-regular" value="20000" class="modelInput">
+        </div>
+        <div class="input">        
+        <label class="input"> 401K:</label> 
+        <input id="contributions-401k" value="20000" class="modelInput">   
+        </div>
+        <div class="input">         
+        <label class="input">  IRA:</label> 
+        <input id="contributions-ira" value="6000" class="modelInput">
+        </div>
+
+        <h2>Social Security</h2>
+        <div class="input">         
+          <label class="input">  IRA:</label> 
+          <input id="contributions-ss" value="2400" class="modelInput">
+          </div>        
+    </div>
+    <div class="column" style="background-color:#ccc;">
+      <h2>Annual Expenses</h2>
+      <div class="input">         
+        <label class="input">In today's dollars:</label> 
+        <input id="expenses" value="100000" class="modelInput">
+        </div>                 
+      <h2>Compounding</h2>
+      <div class="range-slider">
+        Yield:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <input id="roi" value="7" class="modelInput range-slider__range" type="range" min="0" max="15">
+          <span class="range-slider__value">0</span> <br>
+        Inflation:&nbsp;
+          <input id="inflation" value="2" class="modelInput range-slider__range" type="range" min="0" max="5">
+          <span class="range-slider__value">0</span>
+        </div>
+    </div>
+    <div class="column" style="background-color:#ddd;">
+      <h2>Milestones</h2>
+
+        <div class="input">          
+        <label class="input">Current Age:</label> 
+        <input id="now" value="30" class="modelInput">
+        </div>
+        <div class="input">        
+        <label class="input">Early Retirement:</label> 
+        <input id="early_retirement" value="45" class="modelInput">   
+        </div>
+        <div class="input">         
+        <label class="input">Full Retirement:</label> 
+        <input id="full_retirement" value="60" class="modelInput">
+        </div>
+        <div class="input">         
+        <label class="input">Collect Social:</label> 
+        <input id="social_security" value="67" class="modelInput">
+        </div>        
+        <div class="input">         
+        <label class="input">Death ☠:</label> 
+        <input id="death" value="95" class="modelInput">
+        </div>           
+    </div>
+  </div>
+
+<div id="retirement" style="width:100%;height:50%;"></div>
+<script>
+
+function gen_graph () {
+  var balances = {}
+  balances["Regular"] = parseFloat($("#balances-regular").val());
+  balances["401k"] = parseFloat($("#balances-401k").val());
+  balances["IRA"] = parseFloat($("#balances-ira").val());
+  var ira_basis=parseFloat($("#ira-basis").val());
+
+  var contributions = {}
+  contributions["Regular"] = parseFloat($("#contributions-regular").val());
+  contributions["401k"] = parseFloat($("#contributions-401k").val());
+  contributions["IRA"] = parseFloat($("#contributions-ira").val());
+
+  var expenses = parseFloat($("#expenses").val());
+  var ss = parseFloat($("#contributions-ss").val());
+
+  var inflation = parseFloat($("#inflation").val())/100;
+  var roi = parseFloat($("#roi").val())/100;
+
+  var ages = {};
+  ages["Now"] = parseFloat($("#now").val());
+  ages["Early Retirement"] = parseFloat($("#early_retirement").val());;
+  ages["Full Retirement"] = parseFloat($("#full_retirement").val());;
+  ages["Death"] = parseFloat($("#death").val());;
+
+
+  var timeline = [ages["Now"]];
+  var balance = {};
+  for (const account in balances) balance[account] = [balances[account]];
+  for (age = ages["Now"] + 1; age <= ages["Death"]; age++) {
+    timeline.push(age);
+    var now = age-ages["Now"];
+    var prev = now-1;
+    var todays_expenses = expenses;
+    // start this years balance off as equal to last years
+    for (const account in balance) {
+//      console.log(account, balance[account]);
+      balance[account].push(balance[account][prev]);
+    }
+    if (age < ages["Early Retirement"]) {
+      // if not retired add contributions
+      for (const account in balance) balance[account][now] += contributions[account];
+      // roth ira basis is a special case
+      ira_basis += contributions["IRA"];
+    } else {
+      // you are retired, drawdown in order of dict
+      for (const account in balance) {
+        balance[account][now] -= todays_expenses;
+        if (balance[account][now] < 0) {
+          todays_expenses = -balance[account][now];
+          balance[account][now] = 0;
+        } else {
+          todays_expenses = 0;
+        }
+      }
+    } 
+
+    // Growth is applied to average value during year
+    for (const account in balance) balance[account][now] += (balance[account][prev]+balance[account][now]) * (roi) / 2;
+    // expenses and contributions grow with inflation
+    expenses *= (1+inflation);
+    for (const account in contributions) contributions[account] *= (1+inflation); 
+  }
+
+  var data = []
+  for (const account in balance) {
+    data.push( {
+      x: timeline,
+      y: balance[account],
+      mode: 'lines',
+      type: 'scatter',
+      name: account
+    } );
+  }
+
+  var layout = {
+    annotations: []
+  };
+
+  for (milestone in ages) {
+  layout["annotations"].push({
+      x: ages[milestone],
+      y: 0,
+      xref: 'x',
+      yref: 'y',
+      text: milestone,
+      showarrow: true,
+      arrowhead: 7,
+      ax: 0,
+      ay: -20
+    }
+  );
+  }
+
+  retirement = document.getElementById('retirement');
+  Plotly.newPlot(retirement, data, layout, {displayModeBar: false});
+}
+
+
+var inputs = document.getElementsByClassName("modelInput");
+for (var i = 0; i < inputs.length; i++) inputs[i].onchange = gen_graph;
+
+
+gen_graph();
+
+var rangeSlider = function(){
+  var slider = $('.range-slider'),
+      range = $('.range-slider__range'),
+      value = $('.range-slider__value');
+    
+  slider.each(function(){
+
+    value.each(function(){
+      var value = $(this).prev().attr('value');
+      $(this).html(value + "%");
+    });
+
+    range.on('input', function(){
+      $(this).next(value).html(this.value + "%");
+      gen_graph();
+    });
+  });
+};
+
+rangeSlider();
+
+
+</script>
+</body>
+</html>
