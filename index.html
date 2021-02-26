@@ -182,10 +182,10 @@ input::-moz-focus-outer {
         <input id="contributions-ira" value="6000" class="modelInput">
         </div>
 
-        <h2>Social Security</h2>
+        <h2>Anual Social Security</h2>
         <div class="input">         
-          <label class="input">  IRA:</label> 
-          <input id="contributions-ss" value="2400" class="modelInput">
+          <label class="input">Estimate:</label> 
+          <input id="contributions-ss" value="20000" class="modelInput">
           </div>        
     </div>
     <div class="column" style="background-color:#ccc;">
@@ -194,14 +194,12 @@ input::-moz-focus-outer {
         <label class="input">In today's dollars:</label> 
         <input id="expenses" value="100000" class="modelInput">
         </div>                 
-      <h2>Compounding</h2>
-      <div class="range-slider">
-        Yield:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <input id="roi" value="7" class="modelInput range-slider__range" type="range" min="0" max="15">
-          <span class="range-slider__value">0</span> <br>
-        Inflation:&nbsp;
-          <input id="inflation" value="2" class="modelInput range-slider__range" type="range" min="0" max="5">
-          <span class="range-slider__value">0</span>
+      <h2>Annual Compounding</h2>
+      <div class="input">
+        <label class="input">Yield (%):</label> 
+        <input id="roi" value="7" class="modelInput">
+        <label class="input">Inflation (%):</label> 
+        <input id="inflation" value="2.5" class="modelInput">
         </div>
     </div>
     <div class="column" style="background-color:#ddd;">
@@ -393,7 +391,7 @@ var rangeSlider = function(){
 };
 
 rangeSlider();
-
+window.onresize = gen_graph;
 
 </script>
 </body>
