@@ -213,7 +213,7 @@ input::-moz-focus-outer {
         </div>
         <div class="input">        
         <label class="input">Early Retirement:</label> 
-        <input id="early_retirement" value="45" class="modelInput">   
+        <input id="early_retirement" value="50" class="modelInput">   
         </div>
         <div class="input">         
         <label class="input">Full Retirement:</label> 
@@ -242,7 +242,7 @@ function get_config() {
   }
   var inputs = document.getElementsByClassName("modelInput");
   for (var i = 0; i < inputs.length; i++) {
-    if(i.id in localStorage) {
+    if(inputs[i].id in localStorage) {
       inputs[i].value = localStorage.getItem(inputs[i].id);
     }
   }
