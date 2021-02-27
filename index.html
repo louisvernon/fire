@@ -10,11 +10,13 @@
 }
 
 h2 {
-  width: 60%;
-  text-align: right;
+  width: 100%;
+  text-align: center;
+  margin: 4px;
+  padding: 4px;
 }
 div.input {
-  width: 60%;
+  width: 80%;
 }
 
 .modelInput {
@@ -31,7 +33,7 @@ label.input {
 .column {
   float: left;
   width: 25%;
-  padding: 4px;
+  padding: 2px;
   height: 250px;
 }
 
@@ -49,95 +51,6 @@ label.input {
   }
 }
 
-
-.range-slider {
-  margin: 10px 0 0 0%;
-}
-
-.range-slider {
-  width: 100%;
-}
-
-.range-slider__range {
-  -webkit-appearance: none;
-  width: 100px;
-  height: 10px;
-  border-radius: 5px;
-  background: #d7dcdf;
-  outline: none;
-  padding: 0;
-  margin: 0;
-}
-.range-slider__range::-webkit-slider-thumb {
-  -webkit-appearance: none;
-          appearance: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #2c3e50;
-  cursor: pointer;
-  -webkit-transition: background 0.15s ease-in-out;
-  transition: background 0.15s ease-in-out;
-}
-.range-slider__range::-webkit-slider-thumb:hover {
-  background: #1abc9c;
-}
-.range-slider__range:active::-webkit-slider-thumb {
-  background: #1abc9c;
-}
-.range-slider__range::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  border: 0;
-  border-radius: 50%;
-  background: #2c3e50;
-  cursor: pointer;
-  -moz-transition: background 0.15s ease-in-out;
-  transition: background 0.15s ease-in-out;
-}
-.range-slider__range::-moz-range-thumb:hover {
-  background: #1abc9c;
-}
-.range-slider__range:active::-moz-range-thumb { 
-  background: #1abc9c;
-}
-.range-slider__range:focus::-webkit-slider-thumb {
-  box-shadow: 0 0 0 3px #fff, 0 0 0 6px #1abc9c;
-}
-
-.range-slider__value {
-  display: inline-block;
-  position: relative;
-  width: 60px;
-  color: #fff;
-  line-height: 20px;
-  text-align: center;
-  border-radius: 3px;
-  background: #2c3e50;
-  padding: 5px 10px;
-  margin-left: 8px;
-}
-.range-slider__value:after {
-  position: absolute;
-  top: 8px;
-  left: -7px;
-  width: 0;
-  height: 0;
-  border-top: 7px solid transparent;
-  border-right: 7px solid #2c3e50;
-  border-bottom: 7px solid transparent;
-  content: "";
-}
-
-::-moz-range-track {
-  background: #d7dcdf;
-  border: 0;
-}
-
-input::-moz-focus-inner,
-input::-moz-focus-outer {
-  border: 0;
-}
 </style>
 </head>
 
@@ -181,8 +94,13 @@ input::-moz-focus-outer {
         <label class="input">  IRA:</label> 
         <input id="contributions-ira" value="6000" class="modelInput">
         </div>
+        <div class="input">
+        <label class="input">  Fixed Income:</label>
+        <input id="contributions-fixed" value="0" class="modelInput">
+        </div>
 
-        <h2>Anual Social Security</h2>
+
+        <h2>Annual Social Security</h2>
         <div class="input">         
           <label class="input">Estimate:</label> 
           <input id="contributions-ss" value="20000" class="modelInput">
@@ -272,19 +190,20 @@ function gen_graph () {
   contributions["Regular"] = parseFloat($("#contributions-regular").val());
   contributions["401k"] = parseFloat($("#contributions-401k").val());
   contributions["IRA"] = parseFloat($("#contributions-ira").val());
+  var social_security = parseFloat($("#contributions-ss").val());
+  var fixed_income = parseFloat($("#contributions-fixed").val());
 
   var expenses = parseFloat($("#expenses").val());
-  var ss = parseFloat($("#contributions-ss").val());
 
   var inflation = parseFloat($("#inflation").val())/100;
   var roi = parseFloat($("#roi").val())/100;
 
   var ages = {};
   ages["Now"] = parseFloat($("#now").val());
-  ages["Early Retirement"] = parseFloat($("#early_retirement").val());;
-  ages["Full Retirement"] = parseFloat($("#full_retirement").val());;
-  ages["Death"] = parseFloat($("#death").val());;
-
+  ages["Early Retirement"] = parseFloat($("#early_retirement").val());
+  ages["Full Retirement"] = parseFloat($("#full_retirement").val());
+  ages["Death"] = parseFloat($("#death").val());
+  ages["Collect Social"] = parseFloat($("#social_security").val());
 
   var timeline = [ages["Now"]];
   var balance = {};
@@ -298,6 +217,8 @@ function gen_graph () {
     for (const account in balance) {
       balance[account].push(balance[account][prev]);
     }
+    balance["Regular"][now] += fixed_income;
+    if (age >= ages["Collect Social"]) balance["Regular"][now] += social_security;
     if (age < ages["Early Retirement"]) {
       // if not retired add contributions
       for (const account in balance) balance[account][now] += contributions[account];
