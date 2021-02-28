@@ -1,7 +1,7 @@
 <html>
 <head>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         
 <style>
 
@@ -15,20 +15,28 @@ h2 {
   margin: 4px;
   padding: 4px;
 }
+
 div.input {
-  width: 80%;
+  display: inline-block;
+  width: 100%;
 }
 
 .modelInput {
+  display: inline-block;
   width: 25%;
   text-align: center;
 }
 
+button.input {
+  display: inline-block;
+}
+
 label.input {
   display: inline-block;
-  width: 70%;
+  width: 40%;
   text-align: right;
 }
+
 /* Create four equal columns that floats next to each other */
 .column {
   float: left;
@@ -59,7 +67,7 @@ label.input {
   <div class="row">
     <div class="column" style="background-color:#aaa;">
 
-      <h2>Current Balances</h2>
+      <h2>Current Balance</h2>
       <div class="input">          
       <label class="input">Regular:</label> 
       <input id="balances-regular" value="100000" class="modelInput">
@@ -75,6 +83,11 @@ label.input {
       <div class="input">       
       <label class="input">IRA Basis (optional):</label>
       <input id="ira-basis" value="20000" class="modelInput">
+      </div>
+      <h2>Target Balance</h2>
+      <div class="input">          
+      <label class="input">Estate:</label> 
+      <input id="target" value="100000" class="modelInput">
       </div>
 
 
@@ -96,22 +109,22 @@ label.input {
         </div>
         <div class="input">
         <label class="input">  Fixed Income:</label>
-        <input id="contributions-fixed" value="0" class="modelInput">
+        <input id="income-fixed" value="0" class="modelInput">
         </div>
-
-
         <h2>Annual Social Security</h2>
         <div class="input">         
-          <label class="input">Estimate:</label> 
-          <input id="contributions-ss" value="20000" class="modelInput">
-          </div>        
+        <label class="input">Estimate:</label> 
+        <input id="income-ss" value="20000" class="modelInput">
+        </div>        
+
     </div>
     <div class="column" style="background-color:#ccc;">
       <h2>Annual Expenses</h2>
       <div class="input">         
-        <label class="input">In today's dollars:</label> 
+        <label class="input">Regular:</label> 
         <input id="expenses" value="100000" class="modelInput">
-        </div>                 
+        <button name="fit-expenses" class="modelFit">Fit</button>
+        </div>               
       <h2>Annual Compounding</h2>
       <div class="input">
         <label class="input">Yield (%):</label> 
@@ -178,20 +191,21 @@ function set_config() {
 }
 
 
-function gen_graph () {
+function run_estimate (render_graph = true) {
   set_config();
   var balances = {};
   balances["Regular"] = parseFloat($("#balances-regular").val());
   balances["401k"] = parseFloat($("#balances-401k").val());
   balances["IRA"] = parseFloat($("#balances-ira").val());
+  var target = parseInt($("#target").val());
   var ira_basis=parseFloat($("#ira-basis").val());
 
   var contributions = {}
   contributions["Regular"] = parseFloat($("#contributions-regular").val());
   contributions["401k"] = parseFloat($("#contributions-401k").val());
   contributions["IRA"] = parseFloat($("#contributions-ira").val());
-  var social_security = parseFloat($("#contributions-ss").val());
-  var fixed_income = parseFloat($("#contributions-fixed").val());
+  var income_ss = parseFloat($("#income-ss").val());
+  var income_fixed = parseFloat($("#income-fixed").val());
 
   var expenses = parseFloat($("#expenses").val());
 
@@ -207,6 +221,10 @@ function gen_graph () {
 
   var timeline = [ages["Now"]];
   var balance = {};
+  var total_balance = 0;
+  for (const account in balances) total_balance += balances[account];
+  var net_worth = [total_balance];
+
   for (const account in balances) balance[account] = [balances[account]];
   for (age = ages["Now"] + 1; age <= ages["Death"]; age++) {
     timeline.push(age);
@@ -217,8 +235,8 @@ function gen_graph () {
     for (const account in balance) {
       balance[account].push(balance[account][prev]);
     }
-    balance["Regular"][now] += fixed_income;
-    if (age >= ages["Collect Social"]) balance["Regular"][now] += social_security;
+    balance["Regular"][now] += income_fixed;
+    if (age >= ages["Collect Social"]) balance["Regular"][now] += income_ss;
     if (age < ages["Early Retirement"]) {
       // if not retired add contributions
       for (const account in balance) balance[account][now] += contributions[account];
@@ -243,76 +261,114 @@ function gen_graph () {
         balance[account][now] += (balance[account][prev]+balance[account][now]) * (roi) / 2;
       }
     }
+
+    total_balance = 0;
+    for (const account in balance) total_balance +=  balance[account][now];
+    net_worth.push(total_balance);
+
     // expenses and contributions grow with inflation
     expenses *= (1+inflation);
     for (const account in contributions) contributions[account] *= (1+inflation); 
   }
+  
+  if(render_graph) {
 
-  var data = []
-  for (const account in balance) {
+    var data = []
+
     data.push( {
       x: timeline,
-      y: balance[account],
+      y: net_worth,
       mode: 'lines',
       type: 'scatter',
-      name: account,
+      line: {
+        dash: 'dot',
+        width: 4
+      },
+      name: 'Net Worth',
       hoverinfo: "y"
     } );
-  }
 
-  var layout = {
-    annotations: [],
-    yaxis: {fixedrange: true, hoverformat: '.2s'},
-    xaxis : {fixedrange: true}
-  };
 
-  for (milestone in ages) {
-  layout["annotations"].push({
-      x: ages[milestone],
-      y: 0,
-      xref: 'x',
-      yref: 'y',
-      text: milestone,
-      showarrow: true,
-      arrowhead: 7,
-      ax: 0,
-      ay: -20
+    for (const account in balance) {
+      data.push( {
+        x: timeline,
+        y: balance[account],
+        mode: 'lines',
+        type: 'scatter',
+        name: account,
+        hoverinfo: "y"
+      } );
     }
-  );
-  }
 
-  retirement = document.getElementById('retirement');
-  Plotly.newPlot(retirement, data, layout, {displayModeBar: false});
+    var layout = {
+      annotations: [],
+      yaxis: {fixedrange: true, hoverformat: '.2s'},
+      xaxis : {fixedrange: true}
+    };
+
+    for (milestone in ages) {
+    layout["annotations"].push({
+        x: ages[milestone],
+        y: 0,
+        xref: 'x',
+        yref: 'y',
+        text: milestone,
+        showarrow: true,
+        arrowhead: 7,
+        ax: 0,
+        ay: 20
+      }
+    );
+    }
+
+    if(target != 0) {
+        layout["annotations"].push({
+        x: ages["Death"],
+        y: target,
+        xref: 'x',
+        yref: 'y',
+        text: "Desired Estate",
+        showarrow: true,
+        arrowhead: 7,
+        ax: ages["Death"]+5,
+        ay: 0
+      }
+    );
+    }
+    retirement = document.getElementById('retirement');
+    Plotly.newPlot(retirement, data, layout, {displayModeBar: false});
+  }
+  return total_balance - todays_expenses;
+
+
+}
+
+function fit_value() {
+  var remainder = run_estimate(render_graph=false);
+  var target = parseInt($("#target").val());
+  var sign = Math.sign(remainder-target);
+  if (remainder == target) {
+    return;
+  } else {
+    while ((remainder-target) * sign > 0) {
+      $("#expenses").val(parseInt($("#expenses").val()) + sign*10);
+      remainder = run_estimate(render_graph=false);
+    }
+    run_estimate();
+  }
 }
 
 
 var inputs = document.getElementsByClassName("modelInput");
-for (var i = 0; i < inputs.length; i++) inputs[i].onchange = gen_graph;
+for (var i = 0; i < inputs.length; i++) inputs[i].onchange = run_estimate;
+
+var inputs = document.getElementsByClassName("modelFit");
+for (var i = 0; i < inputs.length; i++) inputs[i].onclick = fit_value;
 
 get_config();
-gen_graph();
+run_estimate();
 
-var rangeSlider = function(){
-  var slider = $('.range-slider'),
-      range = $('.range-slider__range'),
-      value = $('.range-slider__value');
-    
-  slider.each(function(){
-
-    value.each(function(){
-      var value = $(this).prev().attr('value');
-      $(this).html(value + "%");
-    });
-
-    range.on('input', function(){
-      $(this).next(value).html(this.value + "%");
-      gen_graph();
-    });
-  });
-};
-
-rangeSlider();
-window.onresize = gen_graph;
+window.onresize = run_estimate;
 
 </script>
 </body>
