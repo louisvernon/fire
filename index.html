@@ -9,6 +9,30 @@
   box-sizing: border-box;
 }
 
+/* Tooltip container */
+.tooltip {
+  display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 25%;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 10px 5px;
+//  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  top: 260px;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
 h2 {
   width: 100%;
   text-align: center;
@@ -30,6 +54,10 @@ div.input {
 button.input {
   display: inline-block;
 }
+
+div.reset {
+  float: center;
+}  
 
 label.input {
   display: inline-block;
@@ -68,25 +96,55 @@ label.input {
     <div class="column" style="background-color:#aaa;">
 
       <h2>Current Balance</h2>
-      <div class="input">          
+      <div class="input tooltip">
+<span class="tooltiptext">
+Regular:<br /> This should reflect non-tax advantaged investments.
+</span>
       <label class="input">Regular:</label> 
       <input id="balances-regular" value="100000" class="modelInput">
       </div>
-      <div class="input">        
-      <label class="input"> 401K:</label> 
+      <div class="input tooltip">
+<span class="tooltiptext">
+Regular:<br /> This should reflect non-tax advantaged investments.
+</span>
+      <label class="input"><em>Regular Basis:</em></label> 
+      <input id="regular-basis" value="0" class="modelInput">
+      </div>
+      <div class="input tooltip">        
+<span class="tooltiptext">
+401k:<br /> This should reflect your current total 401k/403b balance including pre/roth/after-tax.
+</span>
+      <label class="input"> 401k:</label> 
       <input id="balances-401k" value="100000" class="modelInput">   
       </div>
+      <div class="input tooltip">        
+<span class="tooltiptext">
+Roth 401k Basis<br />This should reflect your direct contributions to a Roth or after-tax 401k/403b.
+We assume that this amount will be accessible penalty free prior to retirement age via a Roth conversion ladder or similar.
+If you are unsure please leave this at 0.
+</span>
+      <label class="input"><i>Roth 401k Basis</i>:</label> 
+      <input id="401k-basis" value="0" class="modelInput">   
+      </div>
       <div class="input">         
-      <label class="input">  IRA:</label> 
+      <label class="input">IRA:</label> 
       <input id="balances-ira" value="30000" class="modelInput">
       </div>
-      <div class="input">       
-      <label class="input">IRA Basis (optional):</label>
-      <input id="ira-basis" value="20000" class="modelInput">
+      <div class="input tooltip">
+<span class="tooltiptext">
+Roth IRA Basis<br />This should reflect your direct contributions to a Roth IRA.
+We assume that this amount will be accessible penalty free prior to retirement age.
+If you are unsure please leave this at 0.
+</span>
+      <label class="input"><i>Roth IRA Basis:</i></label>
+      <input id="ira-basis" value="0" class="modelInput">
       </div>
-      <h2>Target Balance</h2>
-      <div class="input">          
-      <label class="input">Remaining Estate:</label> 
+      <h2>Ending Balance</h2>
+      <div class="input tooltip">          
+<span class="tooltiptext">
+Estate<br />Use this to indicate roughly how much investment value you wish to remain in your estate when you die.
+</span>
+      <label class="input">Estate:</label> 
       <input id="target" value="0" class="modelInput">
       </div>
 
@@ -99,20 +157,46 @@ label.input {
         <label class="input">Regular:</label> 
         <input id="contributions-regular" value="20000" class="modelInput">
         </div>
-        <div class="input">        
-        <label class="input"> 401K:</label> 
-        <input id="contributions-401k" value="20000" class="modelInput">   
+        <div class="input tooltip">
+<span class="tooltiptext">
+401k<br />This should reflect your pre-tax contributions to a 401k/403b.
+</span>
+        <label class="input"> 401k:</label> 
+        <input id="contributions-401k" value="10000" class="modelInput">   
         </div>
-        <div class="input">         
+        <div class="input tooltip">
+<span class="tooltiptext">
+401k<br />This should reflect your post-tax contributions to a Roth or after-tax 401k/403b.
+We assume that these contributions will be accessible penalty free prior to retirement age via a Roth conversion.
+If you are unsure please leave this at 0 and use the pre-tax 401k box above.
+</span>
+        <label class="input"> Roth 401K:</label> 
+        <input id="contributions-roth-401k" value="0" class="modelInput">
+        </div>
+        <div class="input tooltip">         
+<span class="tooltiptext">
+IRA<br />This should reflect your after-tax contributions to a Roth IRA.
+Currently we assume all IRA contributions are to a Roth IRA and that these contributions will be accessible penalty free prior to retirement age.
+If you are contributing to a Traditional IRA you should still use this box, but the MAGI may be wrong.
+</span>
         <label class="input">  IRA:</label> 
-        <input id="contributions-ira" value="6000" class="modelInput">
+        <input id="contributions-ira" value="3000" class="modelInput">
         </div>
-        <div class="input">
+        <div class="input tooltip">
+<span class="tooltiptext">
+Fixed Income<br />This should reflect sources of fixed income. 
+We assume that this source of income continues after retirement (unlike the other contributions).
+</span>
         <label class="input">  Fixed Income:</label>
         <input id="income-fixed" value="0" class="modelInput">
         </div>
         <h2>Annual Social Security</h2>
-        <div class="input">         
+        <div class="input tooltip">         
+<span class="tooltiptext">
+Social Security<br />This should reflect your estimated Social Security income once you start collecting it.
+You can configure when this starts using the "Collect Social" milestone. We assume that 85% of SS will be taxed.
+You can get an estimated social security amount from ssa.gov.
+</span>
         <label class="input">Estimate:</label> 
         <input id="income-ss" value="20000" class="modelInput">
         </div>        
@@ -123,7 +207,7 @@ label.input {
       <div class="input">         
         <label class="input">Regular:</label> 
         <input id="expenses" value="100000" class="modelInput">
-        <button name="fit-expenses" class="modelFit">Fit</button>
+        <button name="expenses" class="modelFit" data-fitstep="100">Fit</button>
         </div>               
       <h2>Annual Compounding</h2>
       <div class="input">
@@ -140,11 +224,22 @@ label.input {
         <label class="input">Current Age:</label> 
         <input id="now" value="30" class="modelInput">
         </div>
-        <div class="input">        
+        <div class="input tooltip"> 
+<span class="tooltiptext">
+Early Retirement:<br /> The age at which you plan to stop working. 
+We start spending based on your defined expenses and assumes all contributions have stopped except for Fixed Income.
+</span>
         <label class="input">Early Retirement:</label> 
         <input id="early_retirement" value="50" class="modelInput">   
+        <button name="early_retirement" class="modelFit" data-fitstep="-1">Fit</button>
         </div>
-        <div class="input">         
+        <div class="input tooltip">
+<span class="tooltiptext">
+Full Retirement:<br/ >This describes the age when you can start withdrawing money from your 401K/403b without incurring the 10% penalty. 
+Normally this would be 59.5 but it could start earlier.
+Lookup the "rule of 55" or "Section 72t distributions" for examples. 
+Generally this should be left at the default.
+</span>
         <label class="input">Full Retirement:</label> 
         <input id="full_retirement" value="60" class="modelInput">
         </div>
@@ -155,6 +250,11 @@ label.input {
         <div class="input">         
         <label class="input">Death ☠:</label> 
         <input id="death" value="95" class="modelInput">
+        </div> 
+        <br /> <br />          
+        <div class="input">
+        <label class="input"></label>
+        <button id="reset">Reset All Values</button>
         </div>           
     </div>
   </div>
@@ -190,6 +290,18 @@ function set_config() {
   }
 }
 
+function reset_config() {
+  var localStorage;
+  try {
+    localStorage = window.localStorage;
+  } catch(e) {
+    console.log("localstorage not available.")
+  }
+  if(confirm("Are you sure you want to reset all values to their defaults?")) {
+    localStorage.clear();
+    location.reload();
+  }
+}
 
 function run_estimate (render_graph = true) {
   set_config();
@@ -343,20 +455,33 @@ function run_estimate (render_graph = true) {
 
 }
 
-function fit_value() {
+function fit_value(e) {
+  console.log(e);
+  // what are we fitting
+  var target_id = '#' + e.target.name;
+  // what is our step size
+  var fitstep = parseInt(e.target.dataset["fitstep"]);
   var remainder = run_estimate(render_graph=false);
   var target = parseInt($("#target").val());
+
+  // don't bother fitting if we're already close
+  if (Math.abs(remainder - target) < fitstep) return;
+
+  // what direction do we need to increment
   var sign = Math.sign(remainder-target);
   if (remainder == target) {
     return;
   } else {
     while ((remainder-target) * sign > 0) {
-      $("#expenses").val(parseInt($("#expenses").val()) + sign*10);
+      $(target_id).val(parseInt($(target_id).val()) + sign*fitstep);
       remainder = run_estimate(render_graph=false);
     }
+    // if we crossed into negative remainder territory we take one step back
+    if (remainder < target) $(target_id).val(parseInt($(target_id).val()) - sign*fitstep);
     run_estimate();
   }
 }
+
 
 
 var inputs = document.getElementsByClassName("modelInput");
@@ -364,6 +489,8 @@ for (var i = 0; i < inputs.length; i++) inputs[i].onchange = run_estimate;
 
 var inputs = document.getElementsByClassName("modelFit");
 for (var i = 0; i < inputs.length; i++) inputs[i].onclick = fit_value;
+
+document.getElementById("reset").onclick = reset_config;
 
 get_config();
 run_estimate();
