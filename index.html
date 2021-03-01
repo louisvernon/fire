@@ -112,19 +112,19 @@ Regular:<br /> This should reflect non-tax advantaged investments.
       </div>
       <div class="input tooltip">        
 <span class="tooltiptext">
-401k:<br /> This should reflect your current total 401k/403b balance including pre/roth/after-tax.
+401k:<br /> This should reflect your current pre-tax 401k/403b balance. 
+If you aren't sure about pre-tax vs roth/after-tax then put the total 401k balance here.
 </span>
       <label class="input"> 401k:</label> 
       <input id="balances-401k" value="100000" class="modelInput">   
       </div>
       <div class="input tooltip">        
 <span class="tooltiptext">
-Roth 401k Basis<br />This should reflect your direct contributions to a Roth or after-tax 401k/403b.
-We assume that this amount will be accessible penalty free prior to retirement age via a Roth conversion ladder or similar.
-If you are unsure please leave this at 0.
+Roth 401k<br />This should reflect your Roth/after-tax 401k/403b balance.
+If you are unsure please leave this at and use the 401k box above.
 </span>
-      <label class="input"><i>Roth 401k Basis</i>:</label> 
-      <input id="401k-basis" value="0" class="modelInput">   
+      <label class="input"><i>Roth 401k</i>:</label> 
+      <input id="balances-roth-401k" value="0" class="modelInput">   
       </div>
       <div class="input">         
       <label class="input">IRA:</label> 
@@ -132,11 +132,11 @@ If you are unsure please leave this at 0.
       </div>
       <div class="input tooltip">
 <span class="tooltiptext">
-Roth IRA Basis<br />This should reflect your direct contributions to a Roth IRA.
-We assume that this amount will be accessible penalty free prior to retirement age.
+Roth Basis<br />This should reflect your total contributions to your Roth IRA and Roth/after-tax 401k/403b.
+We assume that this amount will be accessible penalty free prior to retirement age via Roth conversion ladders or similar.
 If you are unsure please leave this at 0.
 </span>
-      <label class="input"><i>Roth IRA Basis:</i></label>
+      <label class="input"><i>Roth Basis:</i></label>
       <input id="ira-basis" value="0" class="modelInput">
       </div>
       <h2>Ending Balance</h2>
@@ -170,7 +170,7 @@ Estate<br />Use this to indicate roughly how much investment value you wish to r
 We assume that these contributions will be accessible penalty free prior to retirement age via a Roth conversion.
 If you are unsure please leave this at 0 and use the pre-tax 401k box above.
 </span>
-        <label class="input"> Roth 401K:</label> 
+        <label class="input"> Roth 401k:</label> 
         <input id="contributions-roth-401k" value="0" class="modelInput">
         </div>
         <div class="input tooltip">         
@@ -308,6 +308,7 @@ function run_estimate (render_graph = true) {
   var balances = {};
   balances["Regular"] = parseFloat($("#balances-regular").val());
   balances["401k"] = parseFloat($("#balances-401k").val());
+  balances["Roth 401k"] = parseFloat($("#balances-roth-401k").val());
   balances["IRA"] = parseFloat($("#balances-ira").val());
   var target = parseInt($("#target").val());
   var ira_basis=parseFloat($("#ira-basis").val());
@@ -315,6 +316,7 @@ function run_estimate (render_graph = true) {
   var contributions = {}
   contributions["Regular"] = parseFloat($("#contributions-regular").val());
   contributions["401k"] = parseFloat($("#contributions-401k").val());
+  contributions["Roth 401k"] = parseFloat($("#contributions-roth-401k").val());
   contributions["IRA"] = parseFloat($("#contributions-ira").val());
   var income_ss = parseFloat($("#income-ss").val());
   var income_fixed = parseFloat($("#income-fixed").val());
@@ -402,16 +404,18 @@ function run_estimate (render_graph = true) {
 
 
     for (const account in balance) {
-      data.push( {
-        x: timeline,
-        y: balance[account],
-        mode: 'lines',
-        type: 'scatter',
-        name: account,
-        hoverinfo: "y"
-      } );
+      console.log(account);
+      if(balance[account][0] + contributions[account] > 0) {
+        data.push( {
+          x: timeline,
+          y: balance[account],
+          mode: 'lines',
+          type: 'scatter',
+          name: account,
+          hoverinfo: "y"
+        } );
+      }
     }
-
     var layout = {
       annotations: [],
       yaxis: {fixedrange: true, hoverformat: '.2s'},
