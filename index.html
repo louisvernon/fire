@@ -98,17 +98,17 @@ label.input {
       <h2>Current Balance</h2>
       <div class="input tooltip">
 <span class="tooltiptext">
-Regular:<br /> This should reflect non-tax advantaged investments.
+Regular:<br /> This should reflect regular non-tax advantaged investments.
 </span>
       <label class="input">Regular:</label> 
       <input id="balances-regular" value="100000" class="modelInput">
       </div>
       <div class="input tooltip">
 <span class="tooltiptext">
-Regular:<br /> This should reflect non-tax advantaged investments.
+Regular Basis:<br /> This should reflect your cost basis for your regular non-tax advantaged investments. If you are unsure please leave this at 0.
 </span>
       <label class="input"><em>Regular Basis:</em></label> 
-      <input id="regular-basis" value="0" class="modelInput">
+      <input id="regular-basis" value="0" class="modelInput" disabled>
       </div>
       <div class="input tooltip">        
 <span class="tooltiptext">
@@ -137,7 +137,7 @@ We assume that this amount will be accessible penalty free prior to retirement a
 If you are unsure please leave this at 0.
 </span>
       <label class="input"><i>Roth Basis:</i></label>
-      <input id="ira-basis" value="0" class="modelInput">
+      <input id="ira-basis" value="0" class="modelInput" disabled>
       </div>
       <h2>Ending Balance</h2>
       <div class="input tooltip">          
