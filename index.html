@@ -101,7 +101,7 @@ label.input {
 Regular:<br /> This should reflect regular non-tax advantaged investments.
 </span>
       <label class="input">Regular:</label> 
-      <input id="balances-regular" value="100000" class="modelInput">
+      <input id="balances-regular" value="50000" class="modelInput">
       </div>
       <div class="input tooltip">
 <span class="tooltiptext">
@@ -116,19 +116,19 @@ Regular Basis:<br /> This should reflect your cost basis for your regular non-ta
 If you aren't sure about pre-tax vs roth/after-tax then put the total 401k balance here.
 </span>
       <label class="input"> 401k:</label> 
-      <input id="balances-401k" value="100000" class="modelInput">   
+      <input id="balances-401k" value="50000" class="modelInput">   
       </div>
       <div class="input tooltip">        
 <span class="tooltiptext">
 Roth 401k<br />This should reflect your Roth/after-tax 401k/403b balance.
-If you are unsure please leave this at and use the 401k box above.
+If you are unsure please leave this at 0 and use the 401k box above.
 </span>
       <label class="input"><i>Roth 401k</i>:</label> 
       <input id="balances-roth-401k" value="0" class="modelInput">   
       </div>
       <div class="input">         
       <label class="input">IRA:</label> 
-      <input id="balances-ira" value="30000" class="modelInput">
+      <input id="balances-ira" value="12000" class="modelInput">
       </div>
       <div class="input tooltip">
 <span class="tooltiptext">
@@ -155,7 +155,7 @@ Estate<br />Use this to indicate roughly how much investment value you wish to r
         <h2>Annual Contributions</h2>
         <div class="input">          
         <label class="input">Regular:</label> 
-        <input id="contributions-regular" value="20000" class="modelInput">
+        <input id="contributions-regular" value="5000" class="modelInput">
         </div>
         <div class="input tooltip">
 <span class="tooltiptext">
@@ -194,7 +194,7 @@ We assume that this source of income continues after retirement (unlike the othe
         <div class="input tooltip">         
 <span class="tooltiptext">
 Social Security<br />This should reflect your estimated Social Security income once you start collecting it.
-You can configure when this starts using the "Collect Social" milestone. We assume that 85% of SS will be taxed.
+You can configure when this starts using the "Collect Social" milestone. 
 You can get an estimated social security amount from ssa.gov.
 </span>
         <label class="input">Estimate:</label> 
@@ -214,10 +214,10 @@ You can get an estimated social security amount from ssa.gov.
       <div class="input tooltip">
 <span class="tooltiptext">
 Annual Spending:<br /> This is a very rough estimate of annual spending/expenses in retirement. 
-We aren't accounting for penalties and taxes (yet) so you should apply a fudge factor depending on your circumstances.
+We aren't accounting for penalties and taxes (yet) so you should assume a fudge factor depending on your circumstances.
 </span>
         <label class="input">Annual Spending:</label> 
-        <input id="expenses" value="100000" class="modelInput">
+        <input id="expenses" value="50000" class="modelInput">
         <button name="expenses" class="modelFit" data-fitstep="100">Fit</button>
         </div>               
 
