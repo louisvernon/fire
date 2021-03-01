@@ -203,12 +203,6 @@ You can get an estimated social security amount from ssa.gov.
 
     </div>
     <div class="column" style="background-color:#ccc;">
-      <h2>Annual Expenses</h2>
-      <div class="input">         
-        <label class="input">Regular:</label> 
-        <input id="expenses" value="100000" class="modelInput">
-        <button name="expenses" class="modelFit" data-fitstep="100">Fit</button>
-        </div>               
       <h2>Annual Compounding</h2>
       <div class="input">
         <label class="input">Yield (%):</label> 
@@ -216,6 +210,17 @@ You can get an estimated social security amount from ssa.gov.
         <label class="input">Inflation (%):</label> 
         <input id="inflation" value="2.5" class="modelInput">
         </div>
+      <h2>Retirement Expenses</h2>
+      <div class="input tooltip">
+<span class="tooltiptext">
+Annual Spending:<br /> This is a very rough estimate of annual spending/expenses in retirement. 
+We aren't accounting for penalties and taxes (yet) so you should apply a fudge factor depending on your circumstances.
+</span>
+        <label class="input">Annual Spending:</label> 
+        <input id="expenses" value="100000" class="modelInput">
+        <button name="expenses" class="modelFit" data-fitstep="100">Fit</button>
+        </div>               
+
     </div>
     <div class="column" style="background-color:#ddd;">
       <h2>Milestones</h2>
