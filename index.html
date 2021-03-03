@@ -14,6 +14,18 @@
   display: inline-block;
 }
 
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 /* Tooltip text */
 .tooltip .tooltiptext {
   visibility: hidden;
@@ -101,14 +113,14 @@ label.input {
 Regular:<br /> This should reflect regular non-tax advantaged investments.
 </span>
       <label class="input">Regular:</label> 
-      <input id="balances-regular" value="50000" class="modelInput">
+      <input id="balances-regular" value="50,000" class="modelInput dollars">
       </div>
       <div class="input tooltip">
 <span class="tooltiptext">
 Regular Basis:<br /> This should reflect your cost basis for your regular non-tax advantaged investments. If you are unsure please leave this at 0.
 </span>
       <label class="input"><em>Regular Basis:</em></label> 
-      <input id="regular-basis" value="0" class="modelInput" disabled>
+      <input id="regular-basis" value="0" class="modelInput dollars" disabled>
       </div>
       <div class="input tooltip">        
 <span class="tooltiptext">
@@ -116,7 +128,7 @@ Regular Basis:<br /> This should reflect your cost basis for your regular non-ta
 If you aren't sure about pre-tax vs roth/after-tax then put the total 401k balance here.
 </span>
       <label class="input"> 401k:</label> 
-      <input id="balances-401k" value="50000" class="modelInput">   
+      <input id="balances-401k" value="50,000" class="modelInput dollars">
       </div>
       <div class="input tooltip">        
 <span class="tooltiptext">
@@ -124,11 +136,11 @@ Roth 401k<br />This should reflect your Roth/after-tax 401k/403b balance.
 If you are unsure please leave this at 0 and use the 401k box above.
 </span>
       <label class="input"><i>Roth 401k</i>:</label> 
-      <input id="balances-roth-401k" value="0" class="modelInput">   
+      <input id="balances-roth-401k" value="0" class="modelInput dollars">
       </div>
       <div class="input">         
       <label class="input">IRA:</label> 
-      <input id="balances-ira" value="12000" class="modelInput">
+      <input id="balances-ira" value="12,000" class="modelInput dollars">
       </div>
       <div class="input tooltip">
 <span class="tooltiptext">
@@ -137,15 +149,16 @@ We assume that this amount will be accessible penalty free prior to retirement a
 If you are unsure please leave this at 0.
 </span>
       <label class="input"><i>Roth Basis:</i></label>
-      <input id="ira-basis" value="0" class="modelInput" disabled>
+      <input id="ira-basis" value="0" class="modelInput dollars" disabled>
       </div>
       <h2>Ending Balance</h2>
       <div class="input tooltip">          
 <span class="tooltiptext">
-Estate<br />Use this to indicate roughly how much investment value you wish to remain in your estate when you die.
+Estate<br />Use this to indicate roughly how much investment value (in today's dollars) you wish to remain in your estate when you die. 
+This value will be adjusted for inflation. 
 </span>
       <label class="input">Estate:</label> 
-      <input id="target" value="0" class="modelInput">
+      <input id="target" value="0" class="modelInput dollars">
       </div>
 
 
@@ -155,14 +168,14 @@ Estate<br />Use this to indicate roughly how much investment value you wish to r
         <h2>Annual Contributions</h2>
         <div class="input">          
         <label class="input">Regular:</label> 
-        <input id="contributions-regular" value="5000" class="modelInput">
+        <input id="contributions-regular" value="5,000" class="modelInput dollars">
         </div>
         <div class="input tooltip">
 <span class="tooltiptext">
 401k<br />This should reflect your pre-tax contributions to a 401k/403b.
 </span>
         <label class="input"> 401k:</label> 
-        <input id="contributions-401k" value="10000" class="modelInput">   
+        <input id="contributions-401k" value="10,000" class="modelInput dollars">
         </div>
         <div class="input tooltip">
 <span class="tooltiptext">
@@ -171,7 +184,7 @@ We assume that these contributions will be accessible penalty free prior to reti
 If you are unsure please leave this at 0 and use the pre-tax 401k box above.
 </span>
         <label class="input"> Roth 401k:</label> 
-        <input id="contributions-roth-401k" value="0" class="modelInput">
+        <input id="contributions-roth-401k" value="0" class="modelInput dollars">
         </div>
         <div class="input tooltip">         
 <span class="tooltiptext">
@@ -180,7 +193,7 @@ Currently we assume all IRA contributions are to a Roth IRA and that these contr
 If you are contributing to a Traditional IRA you should still use this box, but the MAGI may be wrong.
 </span>
         <label class="input">  IRA:</label> 
-        <input id="contributions-ira" value="3000" class="modelInput">
+        <input id="contributions-ira" value="3,000" class="modelInput dollars">
         </div>
         <div class="input tooltip">
 <span class="tooltiptext">
@@ -188,7 +201,7 @@ Fixed Income<br />This should reflect sources of fixed income.
 We assume that this source of income continues after retirement (unlike the other contributions).
 </span>
         <label class="input">  Fixed Income:</label>
-        <input id="income-fixed" value="0" class="modelInput">
+        <input id="income-fixed" value="0" class="modelInput dollars">
         </div>
         <h2>Annual Social Security</h2>
         <div class="input tooltip">         
@@ -198,7 +211,7 @@ You can configure when this starts using the "Collect Social" milestone.
 You can get an estimated social security amount from ssa.gov.
 </span>
         <label class="input">Estimate:</label> 
-        <input id="income-ss" value="20000" class="modelInput">
+        <input id="income-ss" value="20,000" class="modelInput dollars">
         </div>        
 
     </div>
@@ -206,9 +219,9 @@ You can get an estimated social security amount from ssa.gov.
       <h2>Annual Compounding</h2>
       <div class="input">
         <label class="input">Yield (%):</label> 
-        <input id="roi" value="7" class="modelInput">
+        <input id="roi" value="7" class="modelInput" type="number" step="0.1">
         <label class="input">Inflation (%):</label> 
-        <input id="inflation" value="2.5" class="modelInput">
+        <input id="inflation" value="2.5" class="modelInput" type="number" step="0.1">
         </div>
       <h2>Retirement Expenses</h2>
       <div class="input tooltip">
@@ -217,7 +230,7 @@ Annual Spending:<br /> This is a very rough estimate of annual spending/expenses
 We aren't accounting for penalties and taxes (yet) so you should assume a fudge factor depending on your circumstances.
 </span>
         <label class="input">Annual Spending:</label> 
-        <input id="expenses" value="50000" class="modelInput">
+        <input id="expenses" value="50,000" class="modelInput dollars">
         <button name="expenses" class="modelFit" data-fitstep="100">Fit</button>
         </div>               
 
@@ -227,7 +240,7 @@ We aren't accounting for penalties and taxes (yet) so you should assume a fudge 
 
         <div class="input">          
         <label class="input">Current Age:</label> 
-        <input id="now" value="30" class="modelInput">
+        <input id="now" value="30" class="modelInput" type="number"  min="15" max="90">
         </div>
         <div class="input tooltip"> 
 <span class="tooltiptext">
@@ -235,7 +248,7 @@ Early Retirement:<br /> The age at which you plan to stop working.
 We start spending based on your defined expenses and assumes all contributions have stopped except for Fixed Income.
 </span>
         <label class="input">Early Retirement:</label> 
-        <input id="early_retirement" value="50" class="modelInput">   
+        <input id="early_retirement" value="50" class="modelInput" type="number"  min="15" max="90">
         <button name="early_retirement" class="modelFit" data-fitstep="-1">Fit</button>
         </div>
         <div class="input tooltip">
@@ -246,15 +259,15 @@ Lookup the "rule of 55" or "Section 72t distributions" for examples.
 Generally this should be left at the default.
 </span>
         <label class="input">Full Retirement:</label> 
-        <input id="full_retirement" value="60" class="modelInput">
+        <input id="full_retirement" value="60" class="modelInput" type="number"  min="15" max="90"  disabled>
         </div>
-        <div class="input">         
+        <div class="input">
         <label class="input">Collect Social:</label> 
-        <input id="social_security" value="67" class="modelInput">
+        <input id="social_security" value="67" class="modelInput" type="number"  min="15" max="90">
         </div>        
         <div class="input">         
         <label class="input">Death ☠:</label> 
-        <input id="death" value="95" class="modelInput">
+        <input id="death" value="95" class="modelInput" type="number"  min="15" max="120">
         </div> 
         <br /> <br />          
         <div class="input">
@@ -308,25 +321,46 @@ function reset_config() {
   }
 }
 
+$('input.dollars').keyup(function(event) {
+
+  // skip for arrow keys
+  if(event.which >= 37 && event.which <= 40) return;
+
+  // format number
+  $(this).val(function(index, value) {
+    return value
+    .replace(/\D/g, "")
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    ;
+  });
+});
+
 function run_estimate (render_graph = true) {
+  
+//  var inputs = document.getElementsByClassName("modelInput");
+//  for (var i = 0; i < inputs.length; i++) {
+//    inputs[i].value = parseFloat(inputs[i].value.toLocaleString());
+//    console.log(inputs[i].value, parseFloat(inputs[i].value.toLocaleString()));
+//  }
+
   set_config();
   var balances = {};
-  balances["Regular"] = parseFloat($("#balances-regular").val());
-  balances["401k"] = parseFloat($("#balances-401k").val());
-  balances["Roth 401k"] = parseFloat($("#balances-roth-401k").val());
-  balances["IRA"] = parseFloat($("#balances-ira").val());
-  var target = parseInt($("#target").val());
-  var ira_basis=parseFloat($("#ira-basis").val());
+  balances["Regular"] = parseFloat($("#balances-regular").val().replace(/,/g, ''));
+  balances["401k"] = parseFloat($("#balances-401k").val().replace(/,/g, ''));
+  balances["Roth 401k"] = parseFloat($("#balances-roth-401k").val().replace(/,/g, ''));
+  balances["IRA"] = parseFloat($("#balances-ira").val().replace(/,/g, ''));
+  var target = parseFloat($("#target").val().replace(/,/g, ''));
+  var ira_basis=parseFloat($("#ira-basis").val().replace(/,/g, ''));
 
   var contributions = {}
-  contributions["Regular"] = parseFloat($("#contributions-regular").val());
-  contributions["401k"] = parseFloat($("#contributions-401k").val());
-  contributions["Roth 401k"] = parseFloat($("#contributions-roth-401k").val());
-  contributions["IRA"] = parseFloat($("#contributions-ira").val());
-  var income_ss = parseFloat($("#income-ss").val());
-  var income_fixed = parseFloat($("#income-fixed").val());
+  contributions["Regular"] = parseFloat($("#contributions-regular").val().replace(/,/g, ''));
+  contributions["401k"] = parseFloat($("#contributions-401k").val().replace(/,/g, ''));
+  contributions["Roth 401k"] = parseFloat($("#contributions-roth-401k").val().replace(/,/g, ''));
+  contributions["IRA"] = parseFloat($("#contributions-ira").val().replace(/,/g, ''));
+  var income_ss = parseFloat($("#income-ss").val().replace(/,/g, ''));
+  var income_fixed = parseFloat($("#income-fixed").val().replace(/,/g, ''));
 
-  var expenses = parseFloat($("#expenses").val());
+  var expenses = parseFloat($("#expenses").val().replace(/,/g, ''));
 
   var inflation = parseFloat($("#inflation").val())/100;
   var roi = parseFloat($("#roi").val())/100;
@@ -337,6 +371,10 @@ function run_estimate (render_graph = true) {
   ages["Full Retirement"] = parseFloat($("#full_retirement").val());
   ages["Death"] = parseFloat($("#death").val());
   ages["Collect Social"] = parseFloat($("#social_security").val());
+
+  // adjust target estate with inflation
+  //console.log(target, 1+inflation, ages["Death"]-ages["Now"]);
+  target *= Math.pow(1+inflation, ages["Death"]-ages["Now"]);
 
   var timeline = [ages["Now"]];
   var balance = {};
@@ -459,7 +497,7 @@ function run_estimate (render_graph = true) {
     retirement = document.getElementById('retirement');
     Plotly.newPlot(retirement, data, layout, {displayModeBar: false});
   }
-  return total_balance - todays_expenses;
+  return total_balance - todays_expenses - target;
 
 
 }
@@ -471,22 +509,18 @@ function fit_value(e) {
   // what is our step size
   var fitstep = parseInt(e.target.dataset["fitstep"]);
   var remainder = run_estimate(render_graph=false);
-  var target = parseInt($("#target").val());
-
-  // don't bother fitting if we're already close
-  if (Math.abs(remainder - target) < fitstep) return;
 
   // what direction do we need to increment
-  var sign = Math.sign(remainder-target);
-  if (remainder == target) {
+  var sign = Math.sign(remainder);
+  if (remainder == 0) {
     return;
   } else {
-    while ((remainder-target) * sign > 0) {
-      $(target_id).val(parseInt($(target_id).val()) + sign*fitstep);
+    while ((remainder) * sign > 0) {
+      $(target_id).val(parseInt($(target_id).val().replace(/,/g, '')) + sign*fitstep);
       remainder = run_estimate(render_graph=false);
     }
     // if we crossed into negative remainder territory we take one step back
-    if (remainder < target) $(target_id).val(parseInt($(target_id).val()) - sign*fitstep);
+    if (remainder < 0 ) $(target_id).val(parseInt($(target_id).val().replace(/,/g, '')) - sign*fitstep);
     run_estimate();
   }
 }
